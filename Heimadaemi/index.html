@@ -3,9 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Clickable Boxes</title>
+    <style>
+        .box {
+            width: 150px;
+            height: 150px;
+            margin: 10px;
+            display: inline-block;
+            background-color: #f0f0f0;
+            text-align: center;
+            line-height: 150px;
+            border: 2px solid #ddd;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .box:hover {
+            background-color: #ddd;
+        }
+        a {
+            text-decoration: none;
+            color: black;
+        }
+    </style>
 </head>
 <body>
-    <a href="/hd2/02/gasket1.html">heimadæmi 2.1</a>
+
+<a href="/Heimadaemi/hd 2/02/gasket1.html"> 
+    <div class="box">heimadæmi 2.1</div>
+</a>
+
+<a href="https://example.com/item2">
+    <div class="box">Item 2</div>
+</a>
+
+<a href="https://example.com/item3">
+    <div class="box">Item 3</div>
+</a>
+
 </body>
 </html>
