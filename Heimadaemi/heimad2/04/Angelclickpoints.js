@@ -10,7 +10,7 @@ var gl;
 
 // Þarf hámarksfjölda punkta til að taka frá pláss í grafíkminni
 var numCirclePoints = 40;
-var maxNumCircles = 4;  
+var maxNumCircles = 200;  
 var index = 0;
 var points = [];
 window.onload = function init() {
