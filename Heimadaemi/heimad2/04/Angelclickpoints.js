@@ -14,6 +14,7 @@ var maxNumCircles = 200;
 var index = 0;
 var points = [];
 window.onload = function init() {
+    const counterElement = document.getElementById('counter');
 
     canvas = document.getElementById( "gl-canvas" );
     
@@ -49,7 +50,16 @@ window.onload = function init() {
         gl.bufferSubData(gl.ARRAY_BUFFER, 8*index * (numCirclePoints + 2), flatten(points));
 
         index++;
+        if (index <= maxNumCircles){
+        counterElement.textContent = `Circles: ${index}`;
+        }
     } );
+
+    clearButton.addEventListener('click', function() {
+        index = 0;
+        gl.clear(gl.COLOR_BUFFER_BIT);
+        counterElement.textContent = `Circles: ${index}`;  // Reset counter
+    });
 
     
 
@@ -69,6 +79,7 @@ function createCirclePoints( center, radius)
     	points.push(p);
     }
 }
+
 
 
 
