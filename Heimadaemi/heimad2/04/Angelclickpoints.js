@@ -9,9 +9,10 @@ var canvas;
 var gl;
 
 // Þarf hámarksfjölda punkta til að taka frá pláss í grafíkminni
-var maxNumPoints = 200;  
+var numCirclePoints = 40;
+var maxNumCircles = 4;  
 var index = 0;
-
+var points = [];
 window.onload = function init() {
 
     canvas = document.getElementById( "gl-canvas" );
@@ -31,7 +32,7 @@ window.onload = function init() {
     
     var vBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, vBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, 8*maxNumPoints, gl.DYNAMIC_DRAW);
+    gl.bufferData(gl.ARRAY_BUFFER, 8*maxNumCircles*(numCirclePoints + 2), gl.DYNAMIC_DRAW);
     
     var vPosition = gl.getAttribLocation(program, "vPosition");
     gl.vertexAttribPointer(vPosition, 2, gl.FLOAT, false, 0, 0);
@@ -39,25 +40,46 @@ window.onload = function init() {
     
     canvas.addEventListener("mousedown", function(e){
 
-        gl.bindBuffer( gl.ARRAY_BUFFER, vBuffer);
-        
         // Calculate coordinates of new point
-        var t = vec2(2*e.offsetX/canvas.width-1, 2*(canvas.height-e.offsetY)/canvas.height-1);
-        
+        var center= vec2(2*e.offsetX/canvas.width-1, 2*(canvas.height-e.offsetY)/canvas.height-1);
+        var radius = Math.random() * 0.1 + 0.05;
+        createCirclePoints(center,radius)
+        gl.bindBuffer( gl.ARRAY_BUFFER, vBuffer);
         // Add new point behind the others
-        gl.bufferSubData(gl.ARRAY_BUFFER, 8*index, flatten(t));
+        gl.bufferSubData(gl.ARRAY_BUFFER, 8*index * (numCirclePoints + 2), flatten(points));
 
         index++;
     } );
 
+    
+
     render();
 }
+
+function createCirclePoints( center, radius)
+{
+    points = [];
+    points.push( center );
+    
+    var dAngle = 2*Math.PI/numCirclePoints;
+    for( i=numCirclePoints; i>=0; i-- ) {
+        
+    	var a = i*dAngle;
+    	var p = vec2( radius*Math.sin(a) + center[0], radius*Math.cos(a) + center[1] );
+    	points.push(p);
+    }
+}
+
+
 
 
 function render() {
     
     gl.clear( gl.COLOR_BUFFER_BIT );
-    gl.drawArrays( gl.POINTS, 0, index );
+    for (var i =0; i < index ; i++){
+        gl.drawArrays(gl.TRIANGLE_FAN, i * (numCirclePoints + 2), numCirclePoints + 2);
+    }
 
     window.requestAnimFrame(render);
 }
+
