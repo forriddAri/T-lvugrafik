@@ -1,3 +1,4 @@
+
 .box {
     width: 150px;
     height: 150px;
@@ -15,25 +16,3 @@
     background-color: #ddd;
 }
 
-a {
-    text-decoration: none;
-    color: black;
-}
-
-.hd-container {
-    display: flex;
-    justify-content: space-between; /* Distributes items evenly */
-    border: 1px solid black; /* Adds a border around the container */
-    width: 100%; /* Ensures the container takes full width of its parent */
-    box-sizing: border-box; /* Includes border and padding in the container's width */
-    padding: 20px; /* Adds space inside the container */
-    align-items: center; /* Centers items vertically within the container */
-}
-
-.rammi {
-    
-    align-items: center; /* Vertically centers the content inside */
-    justify-content: center; /* Horizontally centers the content inside */
-    width: 80%;
-    height: 80%;
-}
