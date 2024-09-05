@@ -147,10 +147,10 @@ window.onload = function init() {
 
 
 function handleOrientation(event) {
-    var gamma = event.gamma;  // Left to right tilt in degrees
-
+    var beta = event.beta;  // Left to right tilt in degrees
+    
     // Normalize and scale the beta value (modify these values based on testing)
-    var xmove = gamma / 45;  // Scale the movement sensitivity
+    var xmove = beta / 45;  // Scale the movement sensitivity
     if (Math.abs(xmove) > 0.01) {  // Threshold to avoid minor movements
         var newXPosition = gun[2][0] + xmove * 0.05;  // Adjust multiplier for speed
 
