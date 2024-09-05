@@ -106,6 +106,16 @@ window.onload = function init() {
     program = initShaders(gl, "vertex-shader", "fragment-shader");
     gl.useProgram(program);
 
+    // Setup device orientation event listener if on a mobile device
+    if (window.DeviceOrientationEvent) {
+        window.addEventListener("deviceorientation", handleOrientation, true);
+    }
+
+    // Other event listeners here...
+    window.addEventListener("resize", function () {
+        setCanvasSize(canvas);
+    });
+
 
     // Event listeners for mouse
     canvas.addEventListener("mousedown", function (e) {
@@ -133,6 +143,20 @@ window.onload = function init() {
     setCanvasSize(canvas);
 
     render();
+}
+
+
+function handleOrientation(event) {
+    var beta = event.beta;  // Left to right tilt in degrees
+    var gamma = event.gamma;  // Front to back tilt in degrees
+
+    // Normalize and scale the beta value (modify these values based on testing)
+    var xmove = beta / 45;  // Scale the movement sensitivity
+    if (Math.abs(xmove) > 0.01) {  // Threshold to avoid minor movements
+        for (var i = 0; i < 3; i++) {
+            gun[i][0] += xmove * 0.05;  // Adjust multiplier for speed
+        }
+    }
 }
 
 
