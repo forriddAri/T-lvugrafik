@@ -147,14 +147,18 @@ window.onload = function init() {
 
 
 function handleOrientation(event) {
-    var beta = event.beta;  // Left to right tilt in degrees
-    var gamma = event.gamma;  // Front to back tilt in degrees
+    var gamma = event.gamma;  // Left to right tilt in degrees
 
     // Normalize and scale the beta value (modify these values based on testing)
-    var xmove = beta / 45;  // Scale the movement sensitivity
+    var xmove = gamma / 45;  // Scale the movement sensitivity
     if (Math.abs(xmove) > 0.01) {  // Threshold to avoid minor movements
-        for (var i = 0; i < 3; i++) {
-            gun[i][0] += xmove * 0.05;  // Adjust multiplier for speed
+        var newXPosition = gun[2][0] + xmove * 0.05;  // Adjust multiplier for speed
+
+        // Boundary check to keep the gun on screen
+        if (newXPosition > -0.3 && newXPosition < 0.3) {  // Assuming your canvas width allows this range
+            for (var i = 0; i < 3; i++) {
+                gun[i][0] = newXPosition;
+            }
         }
     }
 }
