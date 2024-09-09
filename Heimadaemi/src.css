@@ -95,6 +95,7 @@ span{
 .about-col-1 img{
     width: 100%;
     border-radius: 15px;
+    object-fit: cover;
 }
 .about-col-2{
     flex-basis: 60%;

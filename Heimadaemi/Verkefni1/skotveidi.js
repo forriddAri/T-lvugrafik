@@ -51,18 +51,18 @@ var shot = [
     vec2(-0.01, -0.1)
 ]
 var gun = [
-    vec2(-0.1, -0.9),
-    vec2(-0.3, -0.9),
-    vec2(-0.2, -0.8)
+    vec2(-0.1, -0.85),
+    vec2(-0.5, -0.85),
+    vec2(-0.3, -0.7)
 ];
 var gunColor = vec4(0.486, 0.988, 0.0, 1.0);
 var sky = [
-    vec2(-1, 1),
+    vec2(-1, 0.8),
     vec2(-1, -0.5),
     vec2(1, -0.5),
-    vec2(-1, 1),
+    vec2(-1, 0.8),
     vec2(1, -0.5),
-    vec2(1, 1)
+    vec2(1, 0.8)
 ]
 var skyColor = vec4(0.529, 0.808, 0.922, 1.0);
 var grass = [
@@ -74,6 +74,15 @@ var grass = [
     vec2(1, -0.5)
 ]
 var grassColor = vec4(0.4, 0.239, 0.078, 1.0);
+var scoreBox = [
+    vec2(-1, 1),
+    vec2(-1, 0.8),
+    vec2(1, 0.8),
+    vec2(-1, 1),
+    vec2(1, 0.8),
+    vec2(1, 1)
+];
+var scoreBoxColor = vec4(0, 0, 0, 1);
 
 scoreBar = [
     vec2(0, 0),
@@ -83,6 +92,7 @@ scoreBar = [
     vec2(0.02, 0),
     vec2(0.02, -0.1)
 ];
+
 
 
 
@@ -147,15 +157,13 @@ window.onload = function init() {
 
 
 function handleOrientation(event) {
-    var beta = event.beta;  // Left to right tilt in degrees
-    
-    // Normalize and scale the beta value (modify these values based on testing)
-    var xmove = beta / 45;  // Scale the movement sensitivity
-    if (Math.abs(xmove) > 0.01) {  // Threshold to avoid minor movements
-        var newXPosition = gun[2][0] + xmove * 0.05;  // Adjust multiplier for speed
 
-        // Boundary check to keep the gun on screen
-        if (newXPosition > -0.3 && newXPosition < 0.3) {  // Assuming your canvas width allows this range
+    var beta = event.beta;
+    var xmove = beta / 45; 
+    if (Math.abs(xmove) > 0.01) {  
+        var newXPosition = gun[2][0] + xmove * 0.05; 
+
+        if (newXPosition > -0.3 && newXPosition < 0.3) {  
             for (var i = 0; i < 3; i++) {
                 gun[i][0] = newXPosition;
             }
@@ -194,6 +202,11 @@ function drawPointsToBuffer() {
         colors.push(grassColor);
     }
 
+    //teikna scorebox
+    for (var i = 0; i < scoreBox.length; i++) {
+        vertex.push(scoreBox[i]);
+        colors.push(scoreBoxColor);
+    }
     // teikna skot
     for (var i = 0; i < shots.length; i++) {
         for (var j = 0; j < shot.length; j++) {
@@ -230,8 +243,8 @@ function drawPointsToBuffer() {
     for (var i = 0; i < score; i++) {
         var scoreItem = scoreBar;
             for (var j = 0; j < scoreItem.length; j++) {
-                vertex.push(vec2(-0.95 + scoreItem[j][0] + (i < 5 ? i : 0) * 0.03, 0.95 + scoreItem[j][1]));
-                colors.push(vec4(0.0, 0.0, 0.0, 1.0));
+                vertex.push(vec2(-0.95 + scoreItem[j][0] + (i < 5 ? i : 0) * 0.04 + 0.9, 0.95 + scoreItem[j][1]));
+                colors.push(vec4(1.0, 1.0, 1.0, 1.0));
             }
     }
    
@@ -274,7 +287,7 @@ function updateEntities() {
 
 
     if (birds.length < 6 && Math.random() < 0.01) {
-        var birdY = -0.2 + Math.random() * (0.9 + 0.2);
+        var birdY = -0.2 + Math.random() * (0.6 + 0.2);
         var birdSpeed = (Math.random() * 0.005) + 0.001;
         let birdX = 1.14;
         if (Math.random() > 0.5) birdSpeed = -birdSpeed;
