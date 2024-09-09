@@ -152,6 +152,12 @@ window.onload = function init() {
     });
     setCanvasSize(canvas);
 
+    window.addEventListener("keydown", function(event) {
+        if (event.code === "Space") {
+            shots.push(vec2(gun[2][0], gun[2][1]));
+        }
+    });
+
     render();
 }
 
@@ -268,15 +274,6 @@ function drawPointsToBuffer() {
 
 
 function updateEntities() {
-    var currentTime = Date.now();
-
-    if (currentTime - lastShotTime >= 1000) {
-        shots.push(vec2(gun[2][0], gun[2][1]));
-
-        lastShotTime = currentTime;
-    }
-
-
     for (var i = shots.length - 1; i >= 0; i--) {
         shots[i][1] += 0.01;
 
