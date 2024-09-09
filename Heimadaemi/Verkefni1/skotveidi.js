@@ -154,7 +154,9 @@ window.onload = function init() {
 
     window.addEventListener("keydown", function(event) {
         if (event.code === "Space") {
+            if(shots.length < 3){
             shots.push(vec2(gun[2][0], gun[2][1]));
+            }
         }
     });
 
