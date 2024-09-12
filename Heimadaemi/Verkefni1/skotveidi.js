@@ -11,6 +11,9 @@ var program;
 
 let score = 0;
 
+/**
+ * @param 
+ */
 var birds = [];
 var bird = [
     //body
@@ -116,11 +119,6 @@ window.onload = function init() {
     program = initShaders(gl, "vertex-shader", "fragment-shader");
     gl.useProgram(program);
 
-    // Setup device orientation event listener if on a mobile device
-    if (window.DeviceOrientationEvent) {
-        window.addEventListener("deviceorientation", handleOrientation, true);
-    }
-
     // Other event listeners here...
     window.addEventListener("resize", function () {
         setCanvasSize(canvas);
@@ -161,22 +159,6 @@ window.onload = function init() {
     });
 
     render();
-}
-
-
-function handleOrientation(event) {
-
-    var beta = event.beta;
-    var xmove = beta / 45; 
-    if (Math.abs(xmove) > 0.01) {  
-        var newXPosition = gun[2][0] + xmove * 0.05; 
-
-        if (newXPosition > -0.3 && newXPosition < 0.3) {  
-            for (var i = 0; i < 3; i++) {
-                gun[i][0] = newXPosition;
-            }
-        }
-    }
 }
 
 
