@@ -322,11 +322,23 @@ nav .fa-solid, ul img{
     display: none;
     font-size: 25px;
 }
-
-@media only screen and (max-width:600px){
+/* only screen and */
+@media(max-width:600px){
     #header{
         background-image:url("../myndir/hero-back.png");
     
+    }
+    .hd-container {
+        flex-direction: column;
+        align-items: center;
+        padding: 5px;
+    }
+    
+    .box {
+        width: 100px; /* Decrease the size on small screens */
+        height: 100px;
+        line-height: 100px;
+        margin: 5px;
     }
     .header-text{
         margin-top: 100%;
@@ -383,7 +395,6 @@ nav .fa-solid, ul img{
         flex-basis: 100%;
     }
 }
-
 #msg{
     color: #1e915d;
     margin-top: -40px;
@@ -424,7 +435,7 @@ body{
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    min-height: 100vh;
     margin: 0;
 }
 canvas {
