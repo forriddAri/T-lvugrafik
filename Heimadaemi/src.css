@@ -360,6 +360,10 @@ body{
 canvas {
     border: 1px solid black; 
 }
+canvas:hover {
+    cursor: pointer; 
+}
+
 .button {
     margin: 1rem;
     display: inline-block;

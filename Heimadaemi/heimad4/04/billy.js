@@ -141,6 +141,12 @@ function render()
     mv = mult( mv, rotateX(spinX) );
     mv = mult( mv, rotateY(spinY) ) ;
 
+    if (!movement) {
+        spinX = (spinX + 0.5) % 360;  // Auto-rotate around X-axis
+        spinY = (spinY + 0.5) % 360;  // Auto-rotate around Y-axis
+    }
+    mv = mult( mv, rotateX(spinX) );
+    mv = mult( mv, rotateY(spinY) );
     // Build the new shape...
 
     // First the right leg (extended to make a side of the shelf)
