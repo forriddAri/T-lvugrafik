@@ -112,14 +112,14 @@ function quad(a, b, c, d)
     ];
 
     var vertexColors = [
-        [ 0.0, 0.0, 0.0, 1.0 ],  // black
-        [ 0.0, 0.0, 1.0, 1.0 ],  // blue
-        [ .0, 1.0, 0.0, 1.0 ],  // Green right
-        [ 0.0, .0, 0.0, 1.0 ],  // black bottom
-        [ 1.0, 0.0, 0.0, 1.0 ],  // red
-        [ .0, 1.0, .0, 1.0 ],  // green left
-        [ 0.0, .0, .0, 1.0 ],  // black top
-        [ 1.0, 1.0, 1.0, 1.0 ]   // white
+        [0.3, 0.5, 0.7, 1.0],  // svartur
+        [0.8, 0.2, 0.4, 1.0],  // rauður
+        [0.1, 0.9, 0.2, 1.0],  // gulur
+        [0.0, 0.3, 0.5, 1.0],  // grænn
+        [0.6, 0.4, 0.8, 1.0],  // Bakgrunnur
+        [0.9, 0.7, 0.1, 1.0],  // fjólublár
+        [0.4, 0.6, 0.3, 1.0],  // hvítur
+        [0.2, 0.8, 0.9, 1.0]   // blár
     ];
 
     //vertex color assigned by the index of the vertex
