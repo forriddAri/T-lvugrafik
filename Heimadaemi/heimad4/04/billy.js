@@ -32,7 +32,7 @@ window.onload = function init()
     colorCube();
 
     gl.viewport( 0, 0, canvas.width, canvas.height );
-    gl.clearColor( 1.0, 1.0, 1.0, 1.0 );
+    gl.clearColor(123 / 255, 198 / 255, 102 / 255, 1.0);
     
     gl.enable(gl.DEPTH_TEST);
 
