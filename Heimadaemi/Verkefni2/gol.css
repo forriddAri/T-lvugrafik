@@ -62,6 +62,7 @@ body {
 
 canvas {
     border: 1px solid black;
+    cursor: pointer;
 }
 
 .button-container {
@@ -151,6 +152,7 @@ label {
 
 input[type="range"] {
     width: 100%;
+    cursor: pointer;
     margin-top: 10px;
 }
 
