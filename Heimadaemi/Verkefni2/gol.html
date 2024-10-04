@@ -28,17 +28,19 @@
 <script type="text/javascript" src="../../Common/initShaders.js"></script>
 <script type="text/javascript" src="../../Common/MV.js"></script>
 <script type="text/javascript" src="gol.js"></script>
-
+<header><h1>Game of Life</h1></header>
 <body>
     <div class="main-container">
         <!-- Left flex box for game instructions -->
         <div class="left-box">
-            <h2>Game Instructions</h2>
-            <p>Here you can explain the rules and functionalities of the game:</p>
+            <h2>Hér eru reglurnar:</h2>
             <ul>
-                <li>Rule 1: Survival with 5, 6, or 7 neighbors.</li>
-                <li>Rule 2: Cells come to life with exactly 6 neighbors.</li>
+                <span>Fyrir lifandi hólf:</span>
+                <li>Hólfið heldur áfram að lifa ef það hefur 5, 6 eða 7 lifandi nágranna.</li>
+                <li>Hólfið deyr ef það hefur færri en 5 lifandi nágranna (vegna einangrunar) eða fleiri en 7 lifandi nágranna (vegna offjölgunar).</li>
                 <li>Use the Reset button to restart the game.</li>
+                <span> Fyrir dautt hólf:</span>
+                <li>Hólfið lifnar við ef það hefur nákvæmlega 6 lifandi nágranna.</li>
                 <!-- Add more instructions as needed -->
             </ul>
         </div>
@@ -54,11 +56,21 @@
             <p>Hér geturður áhrifað virkni leik lífsins</p>
             <ul>
                 <li> 
+                    <label for="shakeSlider">Hristings afl: <span id="sliderValue">1.0</span></label>
                     <input type="range" id="shakeSlider" min="1" max="10" step="1" value="1">
-                    <label for="shakeSlider">Hristings afl: <span id="sliderValue">1</span></label>
                 </li>
-
-                <li> </li>
+                <li>
+                    <label for="gridSizeSlider">Grid Size: <span id="gridSizeValue">10</span></label>
+                    <input type="range" id="gridSizeSlider" min="5" max="20" step="1" value="10">
+                </li>
+                <li>
+                    <label for="colorSchemeSelect">Color Scheme:</label>
+                    <select id="colorSchemeSelect">
+                        <option value="default">Default</option>
+                        <option value="pastels">Pastel</option>
+                        <option value="grayscale">Grayscale</option>
+                    </select>
+                </li>
             </ul>
         </div>
     </div>

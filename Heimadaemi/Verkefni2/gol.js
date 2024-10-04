@@ -3,6 +3,8 @@ var gl;
 
 var points = [];
 var colors = [];
+var cBuffer;
+var vBuffer
 
 var movement = false;
 var spinX = 30;
@@ -14,7 +16,6 @@ var gridSize = 10;
 var grid = createGrid(gridSize);
 var lastUpdateTime = 0;
 
-
 var prevGrid = copyGrid(grid);
 
 var animationDuration = 1000;
@@ -22,13 +23,61 @@ var fullRotation = Math.PI * 2;
 
 var updateInterval = 2500;
 
+var shakeMultiplier = 1.0;
+
 var zoom = 25.0; // Initial zoom level (distance from the scene)
 
-window.onload = function init() {
-    canvas = document.getElementById("gl-canvas");
+var vertexColors = [
+    [0.3, 0.5, 0.7, 1.0],  // color for all vertices
+    [1.0, 1.0, 1.0, 1.0],   //hvitur
+    [0.0, 0.275, 0.678, 1.0],   //blár
+    [0.718, 0.071, 0.204, 1.0],  // Rauður
+    [1.0, 0.835, 0.0, 1.0],   //gulur
+    [0.0, 0.608, 0.282, 1.0],  // grænn
+    [1.0, 0.345, 0.0, 1.0],  // appelsinugulur,
+    [0.2, 0.8, 0.9, 1.0]
+];
 
+window.onload = function() {
+
+    // Initialize WebGL and set up the canvas
+    canvas = document.getElementById("gl-canvas");
     gl = WebGLUtils.setupWebGL(canvas);
     if (!gl) { alert("WebGL isn't available"); }
+
+    // Get references to the slider and value display
+    const shakeSlider = document.getElementById('shakeSlider');
+    const sliderValueDisplay = document.getElementById('sliderValue');
+
+    cBuffer = gl.createBuffer();
+    vBuffer = gl.createBuffer();
+
+    // Event listener for shake slider changes
+    shakeSlider.addEventListener('input', function () {
+        shakeMultiplier = parseFloat(shakeSlider.value);
+        sliderValueDisplay.textContent = shakeMultiplier.toFixed(1);
+    });
+
+    const gridSizeSlider = document.getElementById('gridSizeSlider');
+    const gridSizeValue = document.getElementById('gridSizeValue');
+
+    // Event listener for grid size changes
+    gridSizeSlider.addEventListener('input', function () {
+        gridSize = parseInt(gridSizeSlider.value);
+        gridSizeValue.textContent = gridSize;
+        grid = createGrid(gridSize); // Reinitialize the grid based on new size
+        prevGrid = copyGrid(grid);
+    });
+
+    // Add wheel event listener for zooming
+    canvas.addEventListener("wheel", function (e) {
+        e.preventDefault();
+        zoom += e.deltaY * 0.05; // Adjust the 0.05 value to control zoom speed
+        if (zoom < 5.0) zoom = 5.0;     // Set minimum zoom level
+        if (zoom > 100.0) zoom = 100.0; // Set maximum zoom level
+    });
+
+    // Rest of your WebGL setup and render logic
 
     const resetButton = document.getElementById('reset-button');
     resetButton.addEventListener('click', function () {
@@ -37,10 +86,11 @@ window.onload = function init() {
         lastUpdateTime = Date.now();
     });
 
+    // Initialize buffers and shaders
     colorCube();
 
     gl.viewport(0, 0, canvas.width, canvas.height);
-    gl.clearColor(25 / 255, 25 / 255, 112 / 255, 1.0); 
+    gl.clearColor(25 / 255, 25 / 255, 112 / 255, 1.0);
 
     gl.enable(gl.DEPTH_TEST);
 
@@ -50,7 +100,8 @@ window.onload = function init() {
     var program = initShaders(gl, "vertex-shader", "fragment-shader");
     gl.useProgram(program);
 
-    var cBuffer = gl.createBuffer();
+    // Declare buffers at a scope accessible to event listeners
+    cBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, cBuffer);
     gl.bufferData(gl.ARRAY_BUFFER, flatten(colors), gl.STATIC_DRAW);
 
@@ -58,7 +109,7 @@ window.onload = function init() {
     gl.vertexAttribPointer(vColor, 4, gl.FLOAT, false, 0, 0);
     gl.enableVertexAttribArray(vColor);
 
-    var vBuffer = gl.createBuffer();
+    vBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, vBuffer);
     gl.bufferData(gl.ARRAY_BUFFER, flatten(points), gl.STATIC_DRAW);
 
@@ -66,9 +117,17 @@ window.onload = function init() {
     gl.vertexAttribPointer(vPosition, 3, gl.FLOAT, false, 0, 0);
     gl.enableVertexAttribArray(vPosition);
 
+    const colorSchemeSelect = document.getElementById('colorSchemeSelect');
+
+    colorSchemeSelect.addEventListener('change', function () {
+    const selectedScheme = colorSchemeSelect.value;
+    updateColorScheme(selectedScheme);
+    });
+
+
     matrixLoc = gl.getUniformLocation(program, "transform");
 
-    // Event listeners for mouse
+    // Event listeners for mouse interactions
     canvas.addEventListener("mousedown", function (e) {
         movement = true;
         origX = e.offsetX;
@@ -94,48 +153,17 @@ window.onload = function init() {
         }
     });
 
-    // Touch event listeners
-    canvas.addEventListener("touchstart", function (e) {
-        movement = true;
-        origX = e.touches[0].clientX;
-        origY = e.touches[0].clientY;
-    });
-
-    canvas.addEventListener("touchmove", function (e) {
-        if (movement) {
-            var deltaX = e.touches[0].clientX - origX;
-            var deltaY = e.touches[0].clientY - origY;
-            spinY += (deltaX * 0.5) % 360;
-            spinX += (deltaY * 0.5) % 360;
-
-            if (spinX < -90) spinX = -90;
-            if (spinX > 90) spinX = 90;
-
-            origX = e.touches[0].clientX;
-            origY = e.touches[0].clientY;
-        }
-    });
-
-    canvas.addEventListener("touchend", function (e) {
-        movement = false;
-    });
-
-    canvas.addEventListener("wheel", function (e) {
-        e.preventDefault();
-        zoom += e.deltaY * 0.05; // Adjust the 0.05 value to control zoom speed
-        if (zoom < 5.0) zoom = 5.0;     // Set minimum zoom level
-        if (zoom > 100.0) zoom = 100.0; // Set maximum zoom level
-    });
-
-    window.addEventListener("resize", function () {
-        setCanvasSize(canvas);
-    });
-
+    // Start rendering
     render();
 
+    // Set interval for updating the grid
     setInterval(updateGrid, updateInterval);
 
+    // Set initial canvas size and adjust on window resize
     setCanvasSize(canvas);
+    window.addEventListener('resize', function () {
+        setCanvasSize(canvas);
+    });
 }
 
 function colorCube() {
@@ -159,23 +187,11 @@ function quad(a, b, c, d) {
         vec3(0.5, -0.5, -0.5)
     ];
 
-    var vertexColors = [
-        [0.3, 0.5, 0.7, 1.0],  // svartur
-        [0.8, 0.2, 0.4, 1.0],  // rauður
-        [0.1, 0.9, 0.2, 1.0],  // gulur
-        [0.0, 0.3, 0.5, 1.0],  // grænn
-        [0.6, 0.4, 0.8, 1.0],  // Bakgrunnur
-        [0.9, 0.7, 0.1, 1.0],  // fjólublár
-        [0.4, 0.6, 0.3, 1.0],  // hvítur
-        [0.2, 0.8, 0.9, 1.0]   // blár
-    ];
-
-    // Vertex color assigned by the index of the face
     var indices = [a, b, c, a, c, d];
 
     for (var i = 0; i < indices.length; ++i) {
         points.push(vertices[indices[i]]);
-        colors.push(vertexColors[a]);
+        colors.push(vertexColors[a]); // Use the updated vertexColors
     }
 }
 
@@ -206,6 +222,64 @@ function copyGrid(grid) {
     }
     return newGrid;
 }
+
+function updateColorScheme(scheme) {
+    switch (scheme) {
+        case "pastels":
+            vertexColors = [
+                [0.9, 0.6, 0.6, 1.0],  // Darker Pastel Red
+                [0.9, 0.7, 0.5, 1.0],  // Darker Pastel Orange
+                [0.9, 0.9, 0.6, 1.0],  // Darker Pastel Yellow
+                [0.6, 0.9, 0.6, 1.0],  // Darker Pastel Green
+                [0.6, 0.6, 0.9, 1.0],  // Darker Pastel Blue
+                [0.7, 0.6, 0.9, 1.0],  // Darker Pastel Indigo
+                [0.8, 0.6, 0.9, 1.0],  // Darker Pastel Violet
+                [0.9, 0.6, 0.6, 1.0]   // Darker Pastel Red (to complete the loop)
+            ];
+            
+            
+            break;
+        case "grayscale":
+            vertexColors = [
+                [0.2, 0.2, 0.2, 1.0],  // Dark grey
+                [0.3, 0.3, 0.3, 1.0],  // Slightly lighter grey
+                [0.4, 0.4, 0.4, 1.0],  // Medium dark grey
+                [0.5, 0.5, 0.5, 1.0],  // Medium grey
+                [0.6, 0.6, 0.6, 1.0],  // Medium light grey
+                [0.7, 0.7, 0.7, 1.0],  // Light grey
+                [0.8, 0.8, 0.8, 1.0],  // Very light grey
+                [0.9, 0.9, 0.9, 1.0]
+            ];
+            break;
+        default:
+            vertexColors = [
+                [0.3, 0.5, 0.7, 1.0],  // color for all vertices
+                [1.0, 1.0, 1.0, 1.0],   //hvitur
+                [0.0, 0.275, 0.678, 1.0],   //blár
+                [0.718, 0.071, 0.204, 1.0],  // Rauður
+                [1.0, 0.835, 0.0, 1.0],   //gulur
+                [0.0, 0.608, 0.282, 1.0],  // grænn
+                [1.0, 0.345, 0.0, 1.0],  // appelsinugulur,
+                [0.2, 0.8, 0.9, 1.0]
+            ];
+    }
+
+    // Clear the old colors and points
+    colors = [];
+    points = [];
+
+    // Re-create the cube with the new colors
+    colorCube();
+
+    // Re-buffer the color data
+    gl.bindBuffer(gl.ARRAY_BUFFER, cBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, flatten(colors), gl.STATIC_DRAW);
+
+    // Re-buffer the vertex positions
+    gl.bindBuffer(gl.ARRAY_BUFFER, vBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, flatten(points), gl.STATIC_DRAW);
+}
+
 
 function render() {
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
@@ -307,7 +381,6 @@ function renderGrid(globalTransform, progress, animate) {
     }
 }
 
-
 function drawCube(x, y, z, globalTransform) {
     let modelMatrix = mat4();
 
@@ -326,19 +399,6 @@ function drawCube(x, y, z, globalTransform) {
     gl.drawArrays(gl.TRIANGLES, 0, 36);
 }
 
-// Get references to the slider and value display
-const shakeSlider = document.getElementById('shakeSlider');
-const sliderValueDisplay = document.getElementById('sliderValue');
-
-// Default shake multiplier
-var shakeMultiplier = 1.0;
-
-// Event listener for slider changes
-shakeSlider.addEventListener('input', function () {
-    shakeMultiplier = parseFloat(shakeSlider.value);
-    sliderValueDisplay.textContent = shakeMultiplier.toFixed(1);
-});
-
 function drawAnimatedCube(x, y, z, globalTransform, scale) {
     let modelMatrix = mat4();
 
@@ -346,7 +406,7 @@ function drawAnimatedCube(x, y, z, globalTransform, scale) {
     let centerOffset = (gridSize - 1) / 2;
 
     // Introduce random shaking for the x, y, z positions
-    let baseShakeAmount = 0.05; // Base shaking value
+    let baseShakeAmount = 0.025 * shakeMultiplier; // Base shaking value
     let shakeX = (Math.random() - 0.5) * baseShakeAmount * shakeMultiplier; // Multiply by shakeMultiplier
     let shakeY = (Math.random() - 0.5) * baseShakeAmount * shakeMultiplier; // Multiply by shakeMultiplier
     let shakeZ = (Math.random() - 0.5) * baseShakeAmount * shakeMultiplier; // Multiply by shakeMultiplier
@@ -381,7 +441,6 @@ function createEmptyGrid(size) {
     }
     return grid;
 }
-
 
 function setCanvasSize(canvas) {
     var size = Math.min(window.innerWidth * 0.95, window.innerHeight * 0.8);

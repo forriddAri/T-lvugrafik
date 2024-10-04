@@ -1,3 +1,4 @@
+/* General Reset and Layout */
 * {
     margin: 0;
     padding: 0;
@@ -7,6 +8,19 @@
 
 html {
     scroll-behavior: smooth;
+}
+
+header {
+    width: 100%;
+    text-align: center;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+h1 {
+    font-size: 36px;
+    color: #ff004f;
+    font-weight: bold;
 }
 
 body {
@@ -23,7 +37,7 @@ body {
     display: flex;
     justify-content: space-between;
     width: 90%;
-    margin: 20px;
+    margin: 15px;
     flex-grow: 1;
 }
 
@@ -53,7 +67,6 @@ canvas {
 .button-container {
     display: flex;
     justify-content: center;
-    margin: 20px;
 }
 
 .button {
@@ -79,6 +92,10 @@ h2 {
     margin-bottom: 10px;
 }
 
+span {
+    color: #15832d;
+}
+
 ul {
     list-style: none;
 }
@@ -86,3 +103,54 @@ ul {
 ul li {
     margin: 10px 0;
 }
+
+/* Dropdown Styling */
+select {
+    width: 100%;
+    padding: 10px;
+    background-color: #202020;
+    color: #fff;
+    border: 2px solid #007bff;
+    border-radius: 5px;
+    font-size: 14px;
+    appearance: none;
+    background-image: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4 5"><path fill="%23ffffff" d="M2 0L0 2h4z"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 10px;
+    cursor: pointer;
+}
+
+select:hover {
+    border-color: #0056b3;
+    
+}
+
+select:focus {
+    outline: none;
+    border-color: #ff004f;
+    background-image: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"><path fill="%23ffffff" d="M0 3L5 8 10 3z"/></svg>'); 
+}
+
+option {
+    background-color: #202020;
+    color: #fff;
+}
+
+/* Remove default arrow from older browsers */
+select::-ms-expand {
+    display: none;
+   
+}
+
+/* Styling the slider labels and inputs */
+label {
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
+input[type="range"] {
+    width: 100%;
+    margin-top: 10px;
+}
+
