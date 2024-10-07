@@ -405,11 +405,11 @@ function drawAnimatedCube(x, y, z, globalTransform, scale) {
     let spacing = 1.1;
     let centerOffset = (gridSize - 1) / 2;
 
-    // Introduce random shaking for the x, y, z positions
-    let baseShakeAmount = 0.025 * shakeMultiplier; // Base shaking value
-    let shakeX = (Math.random() - 0.5) * baseShakeAmount * shakeMultiplier; // Multiply by shakeMultiplier
-    let shakeY = (Math.random() - 0.5) * baseShakeAmount * shakeMultiplier; // Multiply by shakeMultiplier
-    let shakeZ = (Math.random() - 0.5) * baseShakeAmount * shakeMultiplier; // Multiply by shakeMultiplier
+    // hristings margföldun
+    let baseShakeAmount = 0.025 * shakeMultiplier; 
+    let shakeX = (Math.random() - 0.5) * baseShakeAmount * shakeMultiplier; 
+    let shakeY = (Math.random() - 0.5) * baseShakeAmount * shakeMultiplier; 
+    let shakeZ = (Math.random() - 0.5) * baseShakeAmount * shakeMultiplier; 
 
     // Apply the shaking effect and translation
     modelMatrix = mult(modelMatrix, translate(
