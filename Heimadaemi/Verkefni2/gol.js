@@ -153,8 +153,14 @@ window.onload = function() {
         }
     });
 
+    window.addEventListener("resize", function () {
+        setCanvasSize(canvas);
+    });
+
     // Start rendering
     render();
+
+
 
     // Set interval for updating the grid
     setInterval(updateGrid, updateInterval);
@@ -251,6 +257,30 @@ function updateColorScheme(scheme) {
                 [0.9, 0.9, 0.9, 1.0]
             ];
             break;
+        case "kelvin":
+            vertexColors = [
+                [1.0, 0.27, 0.0, 1.0],  // 1000K - Candlelight (Orange-Red)
+                [1.0, 0.55, 0.0, 1.0],  // 2000K - Incandescent (Dark Orange)
+                [1.0, 0.84, 0.0, 1.0],  // 3000K - Warm White (Golden Yellow)
+                [1.0, 0.98, 0.8, 1.0],  // 4000K - Cool White (Lemon Chiffon)
+                [1.0, 1.0, 1.0, 1.0],   // 5000K - Daylight (Pure White)
+                [0.94, 1.0, 1.0, 1.0],  // 6000K - Overcast (Azure)
+                [0.68, 0.85, 0.9, 1.0], // 7000K - Bright Overcast (Light Blue)
+                [0.53, 0.81, 0.92, 1.0] // 8000K - Deep Shade (Sky Blue)
+            ];
+            break;
+        case "random":
+                vertexColors = [
+                    [Math.random(), Math.random(), Math.random(), 1],
+                    [Math.random(), Math.random(), Math.random(), 1],
+                    [Math.random(), Math.random(), Math.random(), 1],
+                    [Math.random(), Math.random(), Math.random(), 1],
+                    [Math.random(), Math.random(), Math.random(), 1],
+                    [Math.random(), Math.random(), Math.random(), 1],
+                    [Math.random(), Math.random(), Math.random(), 1],
+                    [Math.random(), Math.random(), Math.random(), 1]
+                ];
+                break;
         default:
             vertexColors = [
                 [0.3, 0.5, 0.7, 1.0],  // color for all vertices
@@ -443,16 +473,26 @@ function createEmptyGrid(size) {
 }
 
 function setCanvasSize(canvas) {
-    var size = Math.min(window.innerWidth * 0.95, window.innerHeight * 0.8);
+    // Use smaller scaling factors to reduce canvas size
+    var aspectRatio = canvas.width / canvas.height;
+    var width = window.innerWidth * 0.8; // Reduced from 95% to 80%
+    var height = window.innerHeight * 0.7; // Reduced from 80% to 70%
 
+    // Adjust width and height based on the aspect ratio
+    if (width / height > aspectRatio) {
+        width = height * aspectRatio;
+    } else {
+        height = width / aspectRatio;
+    }
+
+    // Set the canvas size and style size
     var dpr = window.devicePixelRatio || 1;
+    canvas.width = width * dpr;
+    canvas.height = height * dpr;
+    canvas.style.width = width + 'px';
+    canvas.style.height = height + 'px';
 
-    canvas.width = size * dpr;
-    canvas.height = size * dpr;
-
-    canvas.style.width = size + 'px';
-    canvas.style.height = size + 'px';
-
+    // Update WebGL viewport
     if (gl) {
         gl.viewport(0, 0, canvas.width, canvas.height);
     }

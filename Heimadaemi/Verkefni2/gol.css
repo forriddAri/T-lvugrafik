@@ -58,11 +58,16 @@ body {
 .center-box {
     width: 55%;
     text-align: center;
+    overflow: hidden;  /* Prevent overflow */
 }
 
 canvas {
     border: 1px solid black;
     cursor: pointer;
+    max-width: 100%;   /* Canvas will not grow larger than its container */
+    max-height: 100%;  /* Canvas will not grow taller than its container */
+    width: 100%;
+    height: auto;      /* Keep aspect ratio */
 }
 
 .button-container {
@@ -155,4 +160,52 @@ input[type="range"] {
     cursor: pointer;
     margin-top: 10px;
 }
-
+/* only screen and */
+@media(max-width:600px){
+    @media(max-width: 600px) {
+        .main-container {
+            flex-direction: column; /* Stack the containers vertically */
+            align-items: center;
+            width: 100%; /* Take up the full width */
+        }
+    
+        .left-box, .right-box {
+            width: 100%; /* Expand to full width on small screens */
+            margin-bottom: 20px; /* Add spacing between stacked boxes */
+        }
+    
+        .center-box {
+            width: 100%; /* Expand the canvas container */
+            padding: 10px; /* Reduce padding to save space */
+        }
+    
+        canvas {
+            width: 100%; /* Make sure the canvas fits within the container */
+            height: auto;
+        }
+    
+        h1 {
+            font-size: 28px; /* Reduce font size for the header */
+        }
+    
+        h2 {
+            font-size: 20px; /* Adjust subheading size */
+        }
+    
+        .button {
+            font-size: 14px; /* Reduce button text size */
+        }
+    
+        select {
+            font-size: 12px; /* Make dropdown text smaller */
+        }
+    
+        label {
+            font-size: 12px; /* Adjust label size */
+        }
+    
+        input[type="range"] {
+            width: 90%; /* Ensure the range slider fits properly */
+        }
+    }
+}
