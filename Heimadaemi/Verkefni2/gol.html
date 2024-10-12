@@ -1,5 +1,3 @@
-<html>
-
 <link rel="stylesheet" href="gol.css">
 
 <script id="vertex-shader" type="x-shader/x-vertex">
@@ -31,26 +29,22 @@
 <header><h1>Game of Life</h1></header>
 <body>
     <div class="main-container">
-        <!-- Left flex box for game instructions -->
         <div class="left-box">
             <h2>Hér eru reglurnar:</h2>
             <ul>
                 <span>Fyrir lifandi hólf:</span>
                 <li>Hólfið heldur áfram að lifa ef það hefur 5, 6 eða 7 lifandi nágranna.</li>
-                <li>Hólfið deyr ef það hefur færri en 5 lifandi nágranna (vegna einangrunar) eða fleiri en 7 lifandi nágranna (vegna offjölgunar).</li>
+                <li>Hólfið deyr ef það hefur færri en 5 lifandi nágranna eða fleiri en 7 lifandi nágranna.</li>
                 <li>Use the Reset button to restart the game.</li>
                 <span> Fyrir dautt hólf:</span>
                 <li>Hólfið lifnar við ef það hefur nákvæmlega 6 lifandi nágranna.</li>
-                <!-- Add more instructions as needed -->
             </ul>
         </div>
 
-        <!-- Center section with the canvas -->
         <div class="center-box">
-            <canvas id="gl-canvas" width="1100" height="800"> </canvas>
+            <canvas id="gl-canvas" width="1100" height="800"></canvas>
         </div>
 
-        <!-- Right flex box for any extra controls/info -->
         <div class="right-box">
             <h2>$t!ll!ng4r</h2>
             <p>Hér geturður áhrifað virkni leik lífsins</p>
@@ -77,7 +71,6 @@
         </div>
     </div>
 
-    <!-- Buttons at the bottom -->
     <div class="button-container">
         <button class="button" id="reset-button">Reset</button>
         <a href="../../" class="button">til baka</a>

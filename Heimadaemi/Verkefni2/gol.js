@@ -25,34 +25,30 @@ var updateInterval = 2500;
 
 var shakeMultiplier = 1.0;
 
-var zoom = 25.0; // Initial zoom level (distance from the scene)
+var zoom = 25.0; 
 
 var vertexColors = [
-    [0.3, 0.5, 0.7, 1.0],  // color for all vertices
-    [1.0, 1.0, 1.0, 1.0],   //hvitur
-    [0.0, 0.275, 0.678, 1.0],   //blár
-    [0.718, 0.071, 0.204, 1.0],  // Rauður
-    [1.0, 0.835, 0.0, 1.0],   //gulur
-    [0.0, 0.608, 0.282, 1.0],  // grænn
-    [1.0, 0.345, 0.0, 1.0],  // appelsinugulur,
+    [0.3, 0.5, 0.7, 1.0],
+    [1.0, 1.0, 1.0, 1.0],
+    [0.0, 0.275, 0.678, 1.0],
+    [0.718, 0.071, 0.204, 1.0],
+    [1.0, 0.835, 0.0, 1.0],
+    [0.0, 0.608, 0.282, 1.0],
+    [1.0, 0.345, 0.0, 1.0],
     [0.2, 0.8, 0.9, 1.0]
 ];
 
 window.onload = function() {
-
-    // Initialize WebGL and set up the canvas
     canvas = document.getElementById("gl-canvas");
     gl = WebGLUtils.setupWebGL(canvas);
     if (!gl) { alert("WebGL isn't available"); }
 
-    // Get references to the slider and value display
     const shakeSlider = document.getElementById('shakeSlider');
     const sliderValueDisplay = document.getElementById('sliderValue');
 
     cBuffer = gl.createBuffer();
     vBuffer = gl.createBuffer();
 
-    // Event listener for shake slider changes
     shakeSlider.addEventListener('input', function () {
         shakeMultiplier = parseFloat(shakeSlider.value);
         sliderValueDisplay.textContent = shakeMultiplier.toFixed(1);
@@ -61,23 +57,19 @@ window.onload = function() {
     const gridSizeSlider = document.getElementById('gridSizeSlider');
     const gridSizeValue = document.getElementById('gridSizeValue');
 
-    // Event listener for grid size changes
     gridSizeSlider.addEventListener('input', function () {
         gridSize = parseInt(gridSizeSlider.value);
         gridSizeValue.textContent = gridSize;
-        grid = createGrid(gridSize); // Reinitialize the grid based on new size
+        grid = createGrid(gridSize);
         prevGrid = copyGrid(grid);
     });
 
-    // Add wheel event listener for zooming
     canvas.addEventListener("wheel", function (e) {
         e.preventDefault();
-        zoom += e.deltaY * 0.05; // Adjust the 0.05 value to control zoom speed
-        if (zoom < 5.0) zoom = 5.0;     // Set minimum zoom level
-        if (zoom > 100.0) zoom = 100.0; // Set maximum zoom level
+        zoom += e.deltaY * 0.05;
+        if (zoom < 5.0) zoom = 5.0;
+        if (zoom > 100.0) zoom = 100.0;
     });
-
-    // Rest of your WebGL setup and render logic
 
     const resetButton = document.getElementById('reset-button');
     resetButton.addEventListener('click', function () {
@@ -86,7 +78,6 @@ window.onload = function() {
         lastUpdateTime = Date.now();
     });
 
-    // Initialize buffers and shaders
     colorCube();
 
     gl.viewport(0, 0, canvas.width, canvas.height);
@@ -94,13 +85,9 @@ window.onload = function() {
 
     gl.enable(gl.DEPTH_TEST);
 
-    //
-    //  Load shaders and initialize attribute buffers
-    //
     var program = initShaders(gl, "vertex-shader", "fragment-shader");
     gl.useProgram(program);
 
-    // Declare buffers at a scope accessible to event listeners
     cBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, cBuffer);
     gl.bufferData(gl.ARRAY_BUFFER, flatten(colors), gl.STATIC_DRAW);
@@ -120,14 +107,12 @@ window.onload = function() {
     const colorSchemeSelect = document.getElementById('colorSchemeSelect');
 
     colorSchemeSelect.addEventListener('change', function () {
-    const selectedScheme = colorSchemeSelect.value;
-    updateColorScheme(selectedScheme);
+        const selectedScheme = colorSchemeSelect.value;
+        updateColorScheme(selectedScheme);
     });
-
 
     matrixLoc = gl.getUniformLocation(program, "transform");
 
-    // Event listeners for mouse interactions
     canvas.addEventListener("mousedown", function (e) {
         movement = true;
         origX = e.offsetX;
@@ -157,15 +142,10 @@ window.onload = function() {
         setCanvasSize(canvas);
     });
 
-    // Start rendering
     render();
 
-
-
-    // Set interval for updating the grid
     setInterval(updateGrid, updateInterval);
 
-    // Set initial canvas size and adjust on window resize
     setCanvasSize(canvas);
     window.addEventListener('resize', function () {
         setCanvasSize(canvas);
@@ -197,7 +177,7 @@ function quad(a, b, c, d) {
 
     for (var i = 0; i < indices.length; ++i) {
         points.push(vertices[indices[i]]);
-        colors.push(vertexColors[a]); // Use the updated vertexColors
+        colors.push(vertexColors[a]);
     }
 }
 
@@ -233,83 +213,76 @@ function updateColorScheme(scheme) {
     switch (scheme) {
         case "pastels":
             vertexColors = [
-                [0.9, 0.6, 0.6, 1.0],  // Darker Pastel Red
-                [0.9, 0.7, 0.5, 1.0],  // Darker Pastel Orange
-                [0.9, 0.9, 0.6, 1.0],  // Darker Pastel Yellow
-                [0.6, 0.9, 0.6, 1.0],  // Darker Pastel Green
-                [0.6, 0.6, 0.9, 1.0],  // Darker Pastel Blue
-                [0.7, 0.6, 0.9, 1.0],  // Darker Pastel Indigo
-                [0.8, 0.6, 0.9, 1.0],  // Darker Pastel Violet
-                [0.9, 0.6, 0.6, 1.0]   // Darker Pastel Red (to complete the loop)
+                [0.9, 0.6, 0.6, 1.0],
+                [0.9, 0.7, 0.5, 1.0],
+                [0.9, 0.9, 0.6, 1.0],
+                [0.6, 0.9, 0.6, 1.0],
+                [0.6, 0.6, 0.9, 1.0],
+                [0.7, 0.6, 0.9, 1.0],
+                [0.8, 0.6, 0.9, 1.0],
+                [0.9, 0.6, 0.6, 1.0]
             ];
-            
-            
             break;
         case "grayscale":
             vertexColors = [
-                [0.2, 0.2, 0.2, 1.0],  // Dark grey
-                [0.3, 0.3, 0.3, 1.0],  // Slightly lighter grey
-                [0.4, 0.4, 0.4, 1.0],  // Medium dark grey
-                [0.5, 0.5, 0.5, 1.0],  // Medium grey
-                [0.6, 0.6, 0.6, 1.0],  // Medium light grey
-                [0.7, 0.7, 0.7, 1.0],  // Light grey
-                [0.8, 0.8, 0.8, 1.0],  // Very light grey
+                [0.2, 0.2, 0.2, 1.0],
+                [0.3, 0.3, 0.3, 1.0],
+                [0.4, 0.4, 0.4, 1.0],
+                [0.5, 0.5, 0.5, 1.0],
+                [0.6, 0.6, 0.6, 1.0],
+                [0.7, 0.7, 0.7, 1.0],
+                [0.8, 0.8, 0.8, 1.0],
                 [0.9, 0.9, 0.9, 1.0]
             ];
             break;
         case "kelvin":
             vertexColors = [
-                [1.0, 0.27, 0.0, 1.0],  // 1000K - Candlelight (Orange-Red)
-                [1.0, 0.55, 0.0, 1.0],  // 2000K - Incandescent (Dark Orange)
-                [1.0, 0.84, 0.0, 1.0],  // 3000K - Warm White (Golden Yellow)
-                [1.0, 0.98, 0.8, 1.0],  // 4000K - Cool White (Lemon Chiffon)
-                [1.0, 1.0, 1.0, 1.0],   // 5000K - Daylight (Pure White)
-                [0.94, 1.0, 1.0, 1.0],  // 6000K - Overcast (Azure)
-                [0.68, 0.85, 0.9, 1.0], // 7000K - Bright Overcast (Light Blue)
-                [0.53, 0.81, 0.92, 1.0] // 8000K - Deep Shade (Sky Blue)
+                [1.0, 0.27, 0.0, 1.0],
+                [1.0, 0.55, 0.0, 1.0],
+                [1.0, 0.84, 0.0, 1.0],
+                [1.0, 0.98, 0.8, 1.0],
+                [1.0, 1.0, 1.0, 1.0],
+                [0.94, 1.0, 1.0, 1.0],
+                [0.68, 0.85, 0.9, 1.0],
+                [0.53, 0.81, 0.92, 1.0]
             ];
             break;
         case "random":
-                vertexColors = [
-                    [Math.random(), Math.random(), Math.random(), 1],
-                    [Math.random(), Math.random(), Math.random(), 1],
-                    [Math.random(), Math.random(), Math.random(), 1],
-                    [Math.random(), Math.random(), Math.random(), 1],
-                    [Math.random(), Math.random(), Math.random(), 1],
-                    [Math.random(), Math.random(), Math.random(), 1],
-                    [Math.random(), Math.random(), Math.random(), 1],
-                    [Math.random(), Math.random(), Math.random(), 1]
-                ];
-                break;
+            vertexColors = [
+                [Math.random(), Math.random(), Math.random(), 1],
+                [Math.random(), Math.random(), Math.random(), 1],
+                [Math.random(), Math.random(), Math.random(), 1],
+                [Math.random(), Math.random(), Math.random(), 1],
+                [Math.random(), Math.random(), Math.random(), 1],
+                [Math.random(), Math.random(), Math.random(), 1],
+                [Math.random(), Math.random(), Math.random(), 1],
+                [Math.random(), Math.random(), Math.random(), 1]
+            ];
+            break;
         default:
             vertexColors = [
-                [0.3, 0.5, 0.7, 1.0],  // color for all vertices
-                [1.0, 1.0, 1.0, 1.0],   //hvitur
-                [0.0, 0.275, 0.678, 1.0],   //blár
-                [0.718, 0.071, 0.204, 1.0],  // Rauður
-                [1.0, 0.835, 0.0, 1.0],   //gulur
-                [0.0, 0.608, 0.282, 1.0],  // grænn
-                [1.0, 0.345, 0.0, 1.0],  // appelsinugulur,
+                [0.3, 0.5, 0.7, 1.0],
+                [1.0, 1.0, 1.0, 1.0],
+                [0.0, 0.275, 0.678, 1.0],
+                [0.718, 0.071, 0.204, 1.0],
+                [1.0, 0.835, 0.0, 1.0],
+                [0.0, 0.608, 0.282, 1.0],
+                [1.0, 0.345, 0.0, 1.0],
                 [0.2, 0.8, 0.9, 1.0]
             ];
     }
 
-    // Clear the old colors and points
     colors = [];
     points = [];
 
-    // Re-create the cube with the new colors
     colorCube();
 
-    // Re-buffer the color data
     gl.bindBuffer(gl.ARRAY_BUFFER, cBuffer);
     gl.bufferData(gl.ARRAY_BUFFER, flatten(colors), gl.STATIC_DRAW);
 
-    // Re-buffer the vertex positions
     gl.bindBuffer(gl.ARRAY_BUFFER, vBuffer);
     gl.bufferData(gl.ARRAY_BUFFER, flatten(points), gl.STATIC_DRAW);
 }
-
 
 function render() {
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
@@ -320,7 +293,7 @@ function render() {
     var far = 100.0;
     var projectionMatrix = perspective(fov, aspectRatio, near, far);
 
-    var eye = vec3(0.0, 0.0, zoom); // Use the zoom variable here
+    var eye = vec3(0.0, 0.0, zoom);
     var at = vec3(0.0, 0.0, 0.0);
     var up = vec3(0.0, 1.0, 0.0);
     var viewMatrix = lookAt(eye, at, up);
@@ -435,20 +408,17 @@ function drawAnimatedCube(x, y, z, globalTransform, scale) {
     let spacing = 1.1;
     let centerOffset = (gridSize - 1) / 2;
 
-    // hristings margföldun
     let baseShakeAmount = 0.025 * shakeMultiplier; 
     let shakeX = (Math.random() - 0.5) * baseShakeAmount * shakeMultiplier; 
     let shakeY = (Math.random() - 0.5) * baseShakeAmount * shakeMultiplier; 
     let shakeZ = (Math.random() - 0.5) * baseShakeAmount * shakeMultiplier; 
 
-    // Apply the shaking effect and translation
     modelMatrix = mult(modelMatrix, translate(
         (x - centerOffset) * spacing + shakeX,
         (y - centerOffset) * spacing + shakeY,
         (z - centerOffset) * spacing + shakeZ
     ));
 
-    // Apply scaling
     modelMatrix = mult(modelMatrix, scalem(scale * 0.95, scale * 0.95, scale * 0.95));
 
     let finalTransform = mult(globalTransform, modelMatrix);
@@ -473,26 +443,22 @@ function createEmptyGrid(size) {
 }
 
 function setCanvasSize(canvas) {
-    // Use smaller scaling factors to reduce canvas size
     var aspectRatio = canvas.width / canvas.height;
-    var width = window.innerWidth * 0.8; // Reduced from 95% to 80%
-    var height = window.innerHeight * 0.7; // Reduced from 80% to 70%
+    var width = window.innerWidth * 0.8;
+    var height = window.innerHeight * 0.7;
 
-    // Adjust width and height based on the aspect ratio
     if (width / height > aspectRatio) {
         width = height * aspectRatio;
     } else {
         height = width / aspectRatio;
     }
 
-    // Set the canvas size and style size
     var dpr = window.devicePixelRatio || 1;
     canvas.width = width * dpr;
     canvas.height = height * dpr;
     canvas.style.width = width + 'px';
     canvas.style.height = height + 'px';
 
-    // Update WebGL viewport
     if (gl) {
         gl.viewport(0, 0, canvas.width, canvas.height);
     }
