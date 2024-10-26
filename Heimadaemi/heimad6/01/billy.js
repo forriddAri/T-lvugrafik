@@ -55,7 +55,7 @@ window.onload = function init() {
     if (!gl) { alert("WebGL isn't available"); }
 
     gl.viewport(0, 0, canvas.width, canvas.height);
-    gl.clearColor(31 / 255, 36 / 255, 45 / 255, 1.0);
+    gl.clearColor(25 / 255, 25 / 255, 112 / 255, 1.0); 
 
     gl.enable(gl.DEPTH_TEST);
     gl.depthFunc(gl.LEQUAL);
